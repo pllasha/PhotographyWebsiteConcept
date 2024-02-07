@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dominik Photoshoot</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #ecf0f1; /* Calm background color */
+      font-family: 'Arial', sans-serif;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+
+    #logo {
+      width: 80px;
+      height: auto;
+      border-radius: 20%;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-size: 1rem;
+      transition: color 0.2s ease-in-out;
+    }
+
+    .nav-link:hover {
+      color: #555;
+    }
+
+    #koka {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #ticTacToe {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      grid-template-rows: repeat(3, 60px);
+      gap: 5px;
+      margin-top: 20px;
+    }
+
+    .cell {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #000;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .cell:hover {
+      background-color: #ddd;
+    }
+
+    .playerX {
+      color: #3498db;
+    }
+
+    .playerO {
+      color: #e74c3c;
+    }
+
+    .win {
+      background-color: #2ecc71;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 10px;
+      background-color: #34495e; /* Dark background color for the footer */
+      color: #fff; /* White text color for the links */
+      text-align: center;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .link {
+      text-decoration: none;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .facebook {
+      background-color: #1877f2; /* Facebook color */
+    }
+
+    .instagram {
+      background-color: #bc2a8d; /* Instagram color */
+    }
+
+    .custom-link {
+      background-color: #3498db; /* Your custom color */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="Logoja e pare.png" alt="Game Logo" id="logo">
+    <div class="nav">
+      <a href="index.html" class="nav-link">Home </a>
+      <a href="qmimet.html" class="nav-link">Qmimet</a>
+      <p>Kontakto: 045 411 449</p>
+    </div>
+  </header>
+
+  <div id="ticTacToe"></div>
+
+  <footer>
+    <div class="links">
+      <a href="https://www.facebook.com" class="link facebook" target="_blank">Facebook</a>
+      <a href="https://www.instagram.com" class="link instagram" target="_blank">Instagram</a>
+      <a href="https://example.com" class="link custom-link" target="_blank">Your Link</a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const ticTacToe = document.getElementById("ticTacToe");
+      const cells = [];
+
+      let currentPlayer = "X";
+      let gameBoard = ["", "", "", "", "", "", "", "", ""];
+
+      // Create the Tic Tac Toe grid
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.dataset.index = i;
+        ticTacToe.appendChild(cell);
+        cells.push(cell);
+
+        cell.addEventListener("click", function () {
+          if (!gameBoard[i]) {
+            gameBoard[i] = currentPlayer;
+            updateBoard();
+            checkWinner();
+            switchPlayer();
+          }
+        });
+      }
+
+      function updateBoard() {
+        cells.forEach((cell, index) => {
+          cell.textContent = gameBoard[index];
+          cell.classList.remove("win");
+        });
+      }
+
+      function switchPlayer() {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+      }
+
+      function checkWinner() {
+        const winningCombinations = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6]
+        ];
+
+        for (const combination of winningCombinations) {
+          const [a, b, c] = combination;
+
+          if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+            cells[a].classList.add("win");
+            cells[b].classList.add("win");
+            cells[c].classList.add("win");
+
+            setTimeout(() => {
+              alert(`Lojtari ${currentPlayer} FITON!`);
+              resetGame();
+            }, 100);
+            return;
+          }
+        }
+
+        if (!gameBoard.includes("")) {
+          setTimeout(() => {
+            alert("BARAZIM !");
+            resetGame();
+          }, 100);
+        }
+      }
+
+      function resetGame() {
+        gameBoard = ["", "", "", "", "", "", "", "", ""];
+        currentPlayer = "X";
+        updateBoard();
+      }
+    });
+  </script>
+</body>
+</html>
